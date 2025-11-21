@@ -303,8 +303,8 @@
     {
         "id": "3660",
         "label": "SISTEMAS OPERATIVOS AVANZADOS",
-        "anio":1,
-        "cuatrimestre": 6,
+        "anio":4,
+        "cuatrimestre": 1,
         "correlativas": ["3634", "3654"]
     },
     {
