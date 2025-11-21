@@ -18,7 +18,7 @@ function actualizarGrafo(datosGrafo, dataMaterias, network) {
     const nodosActualizados = [];
     const aristasActualizadas = datosGrafo.edges.getIds().map(id => ({ 
         id, 
-        color: { color: 'lightgray' },
+        color: { color: '#9090acff' },
         width: 1
     }));
     
@@ -64,14 +64,11 @@ function actualizarGrafo(datosGrafo, dataMaterias, network) {
             });
         }
     });
-    
     datosGrafo.nodes.update(nodosActualizados);
     datosGrafo.edges.update(aristasActualizadas);
     network.unselectAll(); 
 }
 
-
-// --- 3. Función Principal de Dibujo ---
 async function dibujarGrafoCorrelativas(){
     const response = await fetch('mapa_correlatividades.json');
     if (!response.ok) {
@@ -85,8 +82,8 @@ async function dibujarGrafoCorrelativas(){
     const nodes = dataMaterias.map(materia => ({
         id: materia.id,
         label: materia.label,
-        // Nivel jerárquico: Año + decimal de cuatrimestre
-        level: materia.anio + (materia.cuatrimestre / 10), 
+        // Nivel jerárquico en el mapa
+        level: (materia.anio-1) *2 + (materia.cuatrimestre - 1), 
         shape: 'box',
         correlativas: materia.correlativas 
     }));
@@ -108,48 +105,36 @@ async function dibujarGrafoCorrelativas(){
         edges: new vis.DataSet(edges)
     };
 
-    // --- AQUÍ ESTÁN LOS CAMBIOS CLAVE EN LA CONFIGURACIÓN ---
     const opciones = {
         layout: {
             hierarchical: {
                 direction: "LR", 
                 sortMethod: "directed",
-                levelSeparation: 300, // Tu ajuste (distancia horizontal)
-                
-                // --- CORRECCIÓN DEL CAOS VISUAL ---
-                nodeSpacing: 100,     // Aumentamos espacio vertical entre nodos (antes era 100)
-                treeSpacing: 200,     // Espacio entre árboles diferentes
-                blockShifting: false, // Evita que los bloques se muevan para compactar
-                edgeMinimization: false, // Evita cruces raros de líneas que desordenan todo
-                parentCentralization: false // Mantiene el orden estricto
+                levelSeparation: 250, 
+                nodeSpacing: 100, 
+                treeSpacing: 200, 
+                blockShifting: false,
+                edgeMinimization: false, 
+                parentCentralization: false 
             }
         },
         physics: {
             enabled: false // Desactivamos física desde el inicio para que sea estático y ordenado
         },
         interaction: {
-            dragNodes: false, 
+            dragNodes: true, 
             zoomView: true,
-            hover: false // --- CORRECCIÓN DEL HOVER: Desactivado para no perder el color ---
+            hover: false 
         },
         nodes: {
             font: { size: 14, face: 'Arial' },
             borderWidth: 2,
-            widthConstraint: { maximum: 200 }, // Evita que nodos con texto largo sean eternos
-            color: {
-                border: '#004A99',
-                background: '#ADD8E6',
-                highlight: { // Color del borde al seleccionar (opcional)
-                    border: '#000000',
-                    background: '#3bf33bff' 
-                }
-            }
+            widthConstraint: { maximum: 200 },
         }
     };
 
     const network = new vis.Network(container, datosGrafo, opciones);
     
-    // Aplicar colores iniciales
     actualizarGrafo(datosGrafo, dataMaterias, network);
 
    // --- 4. Manejo del Clic ---
