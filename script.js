@@ -164,6 +164,16 @@ async function dibujarGrafoCorrelativas(){
             actualizarGrafo(datosGrafo, dataMaterias, network);
         }
     });
+    // Limpiar Selección"
+    const btnLimpiar = document.getElementById('clear');
+    
+    if (btnLimpiar) {
+        btnLimpiar.addEventListener('click', function() {
+            materiasAprobadas.clear();
+            guardarAprobadas();
+            actualizarGrafo(datosGrafo, dataMaterias, network);
+        });
+    }
 }
 
 dibujarGrafoCorrelativas();

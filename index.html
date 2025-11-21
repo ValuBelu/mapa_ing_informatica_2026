@@ -5,18 +5,68 @@
     <title>Mapa de carrera - Ingeniería Informática</title>
     <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     <style>
-        /* 2. Estilo simple: que el mapa ocupe toda la ventana */
+        html, body {
+            height: 100vh; 
+            width: 100vw;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; 
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            display: flex;
+            flex-direction: column; 
+        }
+
+        header {
+            background-color: white;
+            height: 70px; 
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 10;
+            flex-shrink: 0;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        #clear {
+            background-color: #ff4d4f;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        #clear:hover {
+            background-color: #d9363e;
+        }
         #network {
             width: 100%;
-            height: 90vh; /* 90% del alto de la ventana */
+            height: calc(100vh - 70px); 
             border: 1px solid lightgray;
         }
     </style>
 </head>
 <body>
-    <h1>Mapa Ing. Informática - 2026</h1>
+    <header>
+        <h1>Mapa Ing. Informática 2026</h1>
+        <button id="clear">Limpiar Selección</button>
+    </header>
     <div id="network"></div>
-
     <script src="script.js"></script>
 </body>
 </html>
