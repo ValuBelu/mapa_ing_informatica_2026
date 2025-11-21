@@ -1,4 +1,3 @@
-// --- 1. Variables Globales y Persistencia ---
 const APROBADAS_KEY = 'mallaAprobadas';
 let materiasAprobadas = new Set(); 
 
@@ -13,7 +12,6 @@ function guardarAprobadas() {
     localStorage.setItem(APROBADAS_KEY, JSON.stringify(Array.from(materiasAprobadas)));
 }
 
-// --- 2. Función de Actualización de Colores ---
 function actualizarGrafo(datosGrafo, dataMaterias, network) {
     const nodosActualizados = [];
     const aristasActualizadas = datosGrafo.edges.getIds().map(id => ({ 
@@ -22,33 +20,46 @@ function actualizarGrafo(datosGrafo, dataMaterias, network) {
         width: 1
     }));
     
-    // A. Pintar APROBADAS (Verde) y PENDIENTES (Azul)
+    //Pintar APROBADAS (Verde) y PENDIENTES (Azul)
     dataMaterias.forEach(materia => {
         const isApproved = materiasAprobadas.has(materia.id);
-        let color = isApproved ? '#3bf33bff' : '#ADD8E6'; 
+        let colorFondo = isApproved ? '#3bf33bff' : '#ADD8E6'; 
         
         nodosActualizados.push({
             id: materia.id,
-            color: { background: color }
+            color: { 
+                background: colorFondo, 
+                border: '#004A99',
+                highlight: {
+                    background: colorFondo,
+                    border: '#004A99'
+                }
+            }
         });
     });
     
-    // B. Calcular y Pintar HABILITADAS (Amarillo)
+    //Calcular y Pintar HABILITADAS (Amarillo)
     dataMaterias.forEach(materia => {
         const todasCorrelativasAprobadas = materia.correlativas.every(
             corrId => materiasAprobadas.has(corrId)
         );
-
         if (todasCorrelativasAprobadas) {
             const materiaId = materia.id;
-
             if (!materiasAprobadas.has(materiaId)) {
                 nodosActualizados.push({
                     id: materiaId,
-                    color: { background: '#FFD700' } 
+                    color: { 
+                        background: '#FFD700', 
+                        border: '#004A99',
+                        highlight: {
+                             background: '#FFD700', 
+                             border: '#004A99',
+                        }
+                    } 
                 });
             }
             
+            // Resaltar flechas habilitadas
             materia.correlativas.forEach(corrId => {
                 const arista = datosGrafo.edges.get({
                     filter: item => item.from === corrId && item.to === materiaId
@@ -64,8 +75,10 @@ function actualizarGrafo(datosGrafo, dataMaterias, network) {
             });
         }
     });
+    
     datosGrafo.nodes.update(nodosActualizados);
     datosGrafo.edges.update(aristasActualizadas);
+    
     network.unselectAll(); 
 }
 
@@ -137,7 +150,7 @@ async function dibujarGrafoCorrelativas(){
     
     actualizarGrafo(datosGrafo, dataMaterias, network);
 
-   // --- 4. Manejo del Clic ---
+   //Manejo del Click
     network.on("click", function (propiedades) {
         const nodeId = propiedades.nodes[0]; 
         
