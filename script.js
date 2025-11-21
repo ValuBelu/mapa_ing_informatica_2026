@@ -1,5 +1,4 @@
-async function dibujarGrafoCorrelativas() 
-{
+async function dibujarGrafoCorrelativas(){
     const response = await fetch('mapa_correlatividades.json');
     if (!response.ok) {
         console.error("Error al cargar el archivo JSON de la malla.");
