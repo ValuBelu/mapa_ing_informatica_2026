@@ -1,10 +1,10 @@
-# 🎓 Mapa de Correlatividades - Ingeniería Informática
+# Mapa de Correlatividades - Ingeniería Informática UNLaM
 
-Este proyecto es una herramienta interactiva de código abierto diseñada para visualizar el plan de estudios de la carrera de **Ingeniería en Informática** de la **UNLaM**.
+Este proyecto es una herramienta interactiva de código abierto diseñada para visualizar el plan de estudios de la carrera de **Ingeniería Informática** de la **UNLaM**.
 
 El objetivo principal es ofrecer a los estudiantes una forma clara y actualizada de ver sus materias, entender las correlatividades y seguir su progreso en la carrera.
 
-La idea nació de la necesidad de contar con una herramienta actualizada. eXISTE UNA PÁGINA QUE CUENTA CON EL PLAN DE 2009 Y 2023, pero estaba desactualizada respecto a los últimos cambios en el plan de estudios.
+La idea nació de la necesidad de contar con una herramienta actualizada. Existe una página con el plan de 2009 Y 2023, pero está desactualizada respecto a los últimos cambios en el plan de estudios.
 
 Este proyecto busca:
 * **Actualizar la información** de correlatividades según los últimos planes (Plan 2023 / Modificaciones 2026).
