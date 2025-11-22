@@ -1,10 +1,10 @@
 const APROBADAS_KEY = 'mallaAprobadas';
 const YEAR_COLORS = {
-    1: '#80D8FF', // Año 1: Aguamarina
-    2: '#FF8A80', // Año 2: Magenta Suave
-    3: '#D1C4E9', // Año 3: Lavanda Profundo
-    4: '#FFAB40', // Año 4: Naranja Coral
-    5: '#CCFF90'  // Año 5: Lima Pastel
+    1: 'oklch(83% 0.14 235)', // Año 1
+    2: 'oklch(73% 0.18 25)',  // Año 2
+    3: 'oklch(83% 0.08 290)', // Año 3
+    4: 'oklch(77% 0.21 65)',  // Año 4
+    5: 'oklch(91% 0.23 128)'  // Año 5
 };
 let materiasAprobadas = new Set(); 
 
@@ -23,23 +23,23 @@ function actualizarGrafo(datosGrafo, dataMaterias, network) {
     const nodosActualizados = [];
     const aristasActualizadas = datosGrafo.edges.getIds().map(id => ({ 
         id, 
-        color: { color: '#9090acff' },
+        color: { color: 'oklch(70% 0.05 260)' },
         width: 1
     }));
     
     //Pintar APROBADAS (Verde) o color base
     dataMaterias.forEach(materia => {
         const isApproved = materiasAprobadas.has(materia.id);
-        let colorBase = YEAR_COLORS[materia.anio] || '#ADD8E6';
-        let colorFondo = isApproved ? '#3bf33bff' : colorBase;       
+        let colorBase = YEAR_COLORS[materia.anio] || 'oklch(90% 0 0)';
+        let colorFondo = isApproved ? 'oklch(80% 0.22 145)' : colorBase;       
         nodosActualizados.push({
             id: materia.id,
             color: { 
                 background: colorFondo, 
-                border: '#2e74beff',
+                border: 'oklch(45% 0.15 260)',
                 highlight: {
                     background: colorFondo,
-                    border: '#004A99'
+                    border: 'oklch(45% 0.15 260)'
                 }
             }
         });
@@ -54,14 +54,15 @@ function actualizarGrafo(datosGrafo, dataMaterias, network) {
         if (tieneCorrelativas && todasCorrelativasAprobadas) {
             const materiaId = materia.id;
             if (!materiasAprobadas.has(materiaId)) {
+                const colorHabilitado = 'oklch(85% 0.18 95)'
                 nodosActualizados.push({
                     id: materiaId,
                     color: { 
-                        background: '#FFD700', 
-                        border: '#004A99',
+                        background: colorHabilitado, 
+                        border: 'oklch(45% 0.15 260)',
                         highlight: {
-                             background: '#FFD700', 
-                             border: '#004A99',
+                             background: colorHabilitado, 
+                             border: 'oklch(45% 0.15 260)',
                         }
                     } 
                 });
@@ -76,7 +77,7 @@ function actualizarGrafo(datosGrafo, dataMaterias, network) {
                 if (arista && arista.length > 0) {
                     aristasActualizadas.push({
                         id: arista[0].id,
-                        color: { color: 'black' }, 
+                        color: { color: 'oklch(20% 0 0)' }, 
                         width: 2
                     });
                 }
@@ -100,10 +101,10 @@ function actualizarGrafo(datosGrafo, dataMaterias, network) {
         
         // Opcional: Cambiar color de texto si se completa
         if (porcentaje === 100) {
-            texto.style.color = '#3bf33b';
+            texto.style.color = 'oklch(60% 0.22 145)';
             texto.innerText = "¡Carrera Completada! 🎉";
         } else {
-            texto.style.color = '#555';
+            texto.style.color = 'oklch(45% 0 0)';
         }
     }
 
@@ -175,8 +176,8 @@ async function dibujarGrafoCorrelativas(){
                 roundness: 0.5
             },
             color: {
-                color: '#9090acff', 
-                highlight: 'black'
+                color: 'oklch(70% 0.05 260)', 
+                highlight: 'oklch(0% 0 0)'
             }
         },
         nodes: {

@@ -16,20 +16,20 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f0f2f5;
-            color: #333;
+            background-color: oklch(96% 0.01 250);
+            color: oklch(28% 0 0);
             display: flex;
             flex-direction: column; 
         }
 
         header {
-            background-color: white;
+            background-color: oklch(91% 0.02 303);
             height: 70px; 
             padding: 0 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px oklch(0% 0 0 / 0.1);
             z-index: 10;
             flex-shrink: 0;
             gap: 15px;
@@ -38,7 +38,7 @@
         h1 {
             font-size: 1.4rem;
             font-weight: 700;
-            color: #1a1a1a;
+            color: oklch(18% 0 0);
             white-space: nowrap;
         }
 
@@ -46,7 +46,7 @@
             display: flex;
             gap: 8px;
             font-size: 0.85rem;
-            color: #555;
+            color: oklch(45% 0 0);
             flex-wrap: wrap; 
             justify-content: center;
         }
@@ -57,14 +57,14 @@
             gap: 5px;
             padding: 3px 5px;
             border-radius: 4px;
-            background-color: #f0f2f5;
+            background-color: oklch(96% 0.01 250);
         }
 
         .color-box {
             width: 15px;
             height: 15px;
             border-radius: 3px;
-            border: 1px solid rgba(0, 0, 0, 0.2);
+            border: 1px solid oklch(0% 0 0 / 0.2);
         }
 
         .progress-container {
@@ -78,7 +78,7 @@
         #progress-text {
             font-size: 0.8rem;
             font-weight: 700;
-            color: #555;
+            color: oklch(45% 0 0);
             margin: 0;
             white-space: nowrap;
         }
@@ -86,22 +86,22 @@
         .progress-bar-bg {
             width: 150px; 
             height: 10px;
-            background-color: #e0e0e0; 
+            background-color: oklch(100% 0 0);
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+            box-shadow: inset 0 1px 2px oklch(0% 0 0 / 0.1);
         }
 
         #progress-fill {
             height: 100%;
             width: 0%;
-            background-color: #55e055; 
+            background-color: oklch(80% 0.22 145);
             transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         #clear {
-            background-color: #ff4d4f;
-            color: white;
+            background-color: oklch(63% 0.23 29);
+            color: oklch(100% 0 0);
             border: none;
             padding: 0.6rem 1.2rem;
             font-size: 0.9rem;
@@ -112,13 +112,34 @@
         }
 
         #clear:hover {
-            background-color: #d9363e;
+            background-color: oklch(56% 0.21 29);
+        }
+
+        footer {
+            height: 30px;
+            background-color: oklch(96% 0.01 250);
+            display: flex;
+            justify-content: center; 
+            align-items: center;
+            font-size: 0.8rem;
+            color: oklch(50% 0 0);
+            border-top: 1px solid oklch(90% 0 0);
+        }
+
+        footer a {
+            color: oklch(60% 0.22 290);
+            text-decoration: none;
+            margin-left: 5px;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
         }
 
         #network {
             width: 100%;
-            height: calc(100vh - 70px); 
-            border: 1px solid lightgray;
+            height: calc(100vh - 100px);
+            border: 1px solid oklch(85% 0 0);
         }
     </style>
 </head>
@@ -127,23 +148,23 @@
         <h1>Mapa Ing. Informática 2026</h1>
         <div class="leyenda-container">
             <div class="leyenda-item">
-                <div class="color-box" style="background-color: #80D8FF;"></div>
+                <div class="color-box" style="background-color: oklch(83% 0.14 235);"></div>
                 <span>1er año</span>
             </div>
             <div class="leyenda-item">
-                <div class="color-box" style="background-color: #FF8A80;"></div>
+                <div class="color-box" style="background-color: oklch(73% 0.18 25);"></div>
                 <span>2do año</span>
             </div>
             <div class="leyenda-item">
-                <div class="color-box" style="background-color: #D1C4E9;"></div>
+                <div class="color-box" style="background-color: oklch(83% 0.08 290);"></div>
                 <span>3er año</span>
             </div>
             <div class="leyenda-item">
-                <div class="color-box" style="background-color: #FFAB40;"></div>
+                <div class="color-box" style="background-color: oklch(77% 0.21 65);"></div>
                 <span>4to año</span>
             </div>
             <div class="leyenda-item">
-                <div class="color-box" style="background-color: #CCFF90;"></div>
+                <div class="color-box" style="background-color: oklch(91% 0.23 128);"></div>
                 <span>5to año</span>
             </div>
         </div>
@@ -156,6 +177,10 @@
         <button id="clear">Limpiar Selección</button>
     </header>
     <div id="network"></div>
+    <footer>
+        Desarrollado con 💜 por
+        <a href="https://github.com/ValuBelu/mapa_ing_informatica_2026" target="_blank"><strong> Valentina (ValuBelu)</strong></a>
+    </footer>
     <script src="script.js"></script>
 </body>
 </html>
