@@ -54,6 +54,30 @@
         #clear:hover {
             background-color: #d9363e;
         }
+
+        .leyenda-container {
+            display: flex;
+            gap: 15px;
+            font-size: 0.85rem;
+            color: #555;
+        }
+
+        .leyenda-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 5px;
+            border-radius: 4px;
+            background-color: #f0f2f5;
+        }
+
+        .color-box {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+        }
+
         #network {
             width: 100%;
             height: calc(100vh - 70px); 
@@ -64,6 +88,28 @@
 <body>
     <header>
         <h1>Mapa Ing. Informática 2026</h1>
+        <div class="leyenda-container">
+            <div class="leyenda-item">
+                <div class="color-box" style="background-color: #80D8FF;"></div>
+                <span>1er año</span>
+            </div>
+            <div class="leyenda-item">
+                <div class="color-box" style="background-color: #FF8A80;"></div>
+                <span>2do año</span>
+            </div>
+            <div class="leyenda-item">
+                <div class="color-box" style="background-color: #D1C4E9;"></div>
+                <span>3er año</span>
+            </div>
+            <div class="leyenda-item">
+                <div class="color-box" style="background-color: #FFAB40;"></div>
+                <span>4to año</span>
+            </div>
+            <div class="leyenda-item">
+                <div class="color-box" style="background-color: #CCFF90;"></div>
+                <span>5to año</span>
+            </div>
+        </div>
         <button id="clear">Limpiar Selección</button>
     </header>
     <div id="network"></div>

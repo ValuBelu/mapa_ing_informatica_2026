@@ -1,4 +1,11 @@
 const APROBADAS_KEY = 'mallaAprobadas';
+const YEAR_COLORS = {
+    1: '#80D8FF', // Año 1: Aguamarina
+    2: '#FF8A80', // Año 2: Magenta Suave
+    3: '#D1C4E9', // Año 3: Lavanda Profundo
+    4: '#FFAB40', // Año 4: Naranja Coral
+    5: '#CCFF90'  // Año 5: Lima Pastel
+};
 let materiasAprobadas = new Set(); 
 
 function cargarAprobadas() {
@@ -20,16 +27,16 @@ function actualizarGrafo(datosGrafo, dataMaterias, network) {
         width: 1
     }));
     
-    //Pintar APROBADAS (Verde) y PENDIENTES (Azul)
+    //Pintar APROBADAS (Verde) o color base
     dataMaterias.forEach(materia => {
         const isApproved = materiasAprobadas.has(materia.id);
-        let colorFondo = isApproved ? '#3bf33bff' : '#ADD8E6'; 
-        
+        let colorBase = YEAR_COLORS[materia.anio] || '#ADD8E6';
+        let colorFondo = isApproved ? '#3bf33bff' : colorBase;       
         nodosActualizados.push({
             id: materia.id,
             color: { 
                 background: colorFondo, 
-                border: '#004A99',
+                border: '#2e74beff',
                 highlight: {
                     background: colorFondo,
                     border: '#004A99'
@@ -40,10 +47,11 @@ function actualizarGrafo(datosGrafo, dataMaterias, network) {
     
     //Calcular y Pintar HABILITADAS (Amarillo)
     dataMaterias.forEach(materia => {
+        const tieneCorrelativas = materia.correlativas.length > 0;
         const todasCorrelativasAprobadas = materia.correlativas.every(
             corrId => materiasAprobadas.has(corrId)
         );
-        if (todasCorrelativasAprobadas) {
+        if (tieneCorrelativas && todasCorrelativasAprobadas) {
             const materiaId = materia.id;
             if (!materiasAprobadas.has(materiaId)) {
                 nodosActualizados.push({
@@ -132,12 +140,24 @@ async function dibujarGrafoCorrelativas(){
             }
         },
         physics: {
-            enabled: false // Desactivamos física desde el inicio para que sea estático y ordenado
+            enabled: false
         },
         interaction: {
             dragNodes: true, 
             zoomView: true,
             hover: false 
+        },
+        edges: {
+            smooth: {
+                enabled: true,
+                type: 'cubicBezier',
+                forceDirection: 'horizontal',
+                roundness: 0.5
+            },
+            color: {
+                color: '#9090acff', 
+                highlight: 'black'
+            }
         },
         nodes: {
             font: { size: 14, face: 'Arial' },
@@ -150,7 +170,6 @@ async function dibujarGrafoCorrelativas(){
     
     actualizarGrafo(datosGrafo, dataMaterias, network);
 
-   //Manejo del Click
     network.on("click", function (propiedades) {
         const nodeId = propiedades.nodes[0]; 
         
@@ -164,7 +183,7 @@ async function dibujarGrafoCorrelativas(){
             actualizarGrafo(datosGrafo, dataMaterias, network);
         }
     });
-    // Limpiar Selección"
+
     const btnLimpiar = document.getElementById('clear');
     
     if (btnLimpiar) {
