@@ -87,6 +87,26 @@ function actualizarGrafo(datosGrafo, dataMaterias, network) {
     datosGrafo.nodes.update(nodosActualizados);
     datosGrafo.edges.update(aristasActualizadas);
     
+    const totalMaterias = dataMaterias.length;
+    const aprobadasCount = materiasAprobadas.size;
+    const porcentaje = Math.round((aprobadasCount / totalMaterias) * 100);
+
+    const barra = document.getElementById('progress-fill');
+    const texto = document.getElementById('progress-text');
+
+    if (barra && texto) {
+        barra.style.width = `${porcentaje}%`;
+        texto.innerText = `${aprobadasCount} de ${totalMaterias} (${porcentaje}%)`;
+        
+        // Opcional: Cambiar color de texto si se completa
+        if (porcentaje === 100) {
+            texto.style.color = '#3bf33b';
+            texto.innerText = "¡Carrera Completada! 🎉";
+        } else {
+            texto.style.color = '#555';
+        }
+    }
+
     network.unselectAll(); 
 }
 
