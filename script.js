@@ -1,10 +1,10 @@
 const APROBADAS_KEY = 'mallaAprobadas';
 const YEAR_COLORS = {
-    1: 'oklch(83% 0.14 235)', // Año 1
-    2: 'oklch(73% 0.18 25)',  // Año 2
-    3: 'oklch(83% 0.08 290)', // Año 3
-    4: 'oklch(77% 0.21 65)',  // Año 4
-    5: 'oklch(91% 0.23 128)'  // Año 5
+    1: 'oklch(83% 0.14 235)',
+    2: 'oklch(73% 0.18 25)',
+    3: 'oklch(83% 0.08 290)',
+    4: 'oklch(77% 0.21 65)',
+    5: 'oklch(91% 0.23 128)'
 };
 let materiasAprobadas = new Set(); 
 
@@ -67,7 +67,6 @@ function actualizarGrafo(datosGrafo, dataMaterias, network) {
                     } 
                 });
             }
-            
             // Resaltar flechas habilitadas
             materia.correlativas.forEach(corrId => {
                 const arista = datosGrafo.edges.get({
@@ -98,8 +97,6 @@ function actualizarGrafo(datosGrafo, dataMaterias, network) {
     if (barra && texto) {
         barra.style.width = `${porcentaje}%`;
         texto.innerText = `${aprobadasCount} de ${totalMaterias} (${porcentaje}%)`;
-        
-        // Opcional: Cambiar color de texto si se completa
         if (porcentaje === 100) {
             texto.style.color = 'oklch(60% 0.22 145)';
             texto.innerText = "¡Carrera Completada! 🎉";
@@ -181,7 +178,11 @@ async function dibujarGrafoCorrelativas(){
             }
         },
         nodes: {
-            font: { size: 14, face: 'Arial' },
+            font: { 
+                face: 'Verdana',
+                size: 14, 
+                vadjust: 0
+            },
             borderWidth: 2,
             widthConstraint: { maximum: 200 },
         }
