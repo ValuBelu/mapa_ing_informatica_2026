@@ -6,11 +6,15 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     <style>
-        html, body {
-            height: 100vh; 
-            width: 100vw;
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
+        }
+
+        html, body {
+            height: 100%; 
+            width: 100%;
             overflow: hidden; 
         }
 
@@ -24,10 +28,11 @@
 
         header {
             background-color: oklch(91% 0.02 303);
-            height: 70px; 
-            padding: 0 2rem;
+            min-height: 60px; 
+            padding: 0.8rem 1.5rem;
             display: flex;
             justify-content: space-between;
+            flex-wrap: wrap;
             align-items: center;
             box-shadow: 0 2px 4px oklch(0% 0 0 / 0.1);
             z-index: 10;
@@ -69,22 +74,19 @@
 
         .progress-container {
             display: flex;
-            flex-direction: row;
             align-items: center;
             gap: 10px;
-            margin: 0;
         }
 
         #progress-text {
             font-size: 0.8rem;
             font-weight: 700;
             color: oklch(45% 0 0);
-            margin: 0;
             white-space: nowrap;
         }
 
         .progress-bar-bg {
-            width: 150px; 
+            width: 100px; 
             height: 10px;
             background-color: oklch(100% 0 0);
             border-radius: 10px;
@@ -109,6 +111,7 @@
             border-radius: 8px;
             cursor: pointer;
             transition: background-color 0.2s ease;
+            white-space: nowrap;
         }
 
         #clear:hover {
@@ -124,6 +127,9 @@
             font-size: 0.8rem;
             color: oklch(50% 0 0);
             border-top: 1px solid oklch(90% 0 0);
+            flex-shrink: 0;
+            text-align: center;
+            padding: 0 10px;
         }
 
         footer a {
@@ -138,8 +144,35 @@
 
         #network {
             width: 100%;
-            height: calc(100vh - 100px);
+            flex: 1;
+            min-height: 0;
             border: 1px solid oklch(85% 0 0);
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column; /* Apilar elementos verticalmente */
+                justify-content: center;
+                gap: 10px;
+                padding: 1rem;
+                height: auto; /* Dejar que crezca lo necesario */
+            }
+
+            h1 {
+                font-size: 1.2rem; /* Título un poco más chico */
+                margin-bottom: 5px;
+            }
+
+            .progress-container {
+                width: 100%;
+                justify-content: center; /* Centrar barra */
+            }
+            
+            /* Opcional: en móviles muy chicos, ocultar el texto del footer si molesta */
+            footer {
+                font-size: 0.65rem;
+            }
         }
     </style>
 </head>
