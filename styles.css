@@ -1,0 +1,203 @@
+* {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%; 
+            width: 100%;
+            overflow: hidden; 
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: oklch(96% 0.01 250);
+            color: oklch(28% 0 0);
+            display: flex;
+            flex-direction: column; 
+        }
+
+        header {
+            background-color: oklch(91% 0.02 303);
+            min-height: 60px; 
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            align-items: center;
+            box-shadow: 0 2px 4px oklch(0% 0 0 / 0.1);
+            z-index: 10;
+            flex-shrink: 0;
+            gap: 15px;
+        }
+
+        h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: oklch(18% 0 0);
+            white-space: nowrap;
+        }
+
+        .leyenda-container {
+            display: flex;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: oklch(45% 0 0);
+            flex-wrap: wrap; 
+            justify-content: center;
+        }
+
+        .leyenda-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 5px;
+            border-radius: 4px;
+            background-color: oklch(96% 0.01 250);
+        }
+
+        .color-box {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+            border: 1px solid oklch(0% 0 0 / 0.2);
+        }
+
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #progress-text {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: oklch(45% 0 0);
+            white-space: nowrap;
+        }
+
+        .progress-bar-bg {
+            width: 100px; 
+            height: 10px;
+            background-color: oklch(100% 0 0);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 2px oklch(0% 0 0 / 0.1);
+        }
+
+        #progress-fill {
+            height: 100%;
+            width: 0%;
+            background-color: oklch(80% 0.22 145);
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #clear {
+            background-color: oklch(63% 0.23 29);
+            color: oklch(100% 0 0);
+            border: none;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            white-space: nowrap;
+        }
+
+        #clear:hover {
+            background-color: oklch(56% 0.21 29);
+        }
+
+        footer {
+            height: 30px;
+            background-color: oklch(96% 0.01 250);
+            display: flex;
+            justify-content: center; 
+            align-items: center;
+            font-size: 0.8rem;
+            color: oklch(50% 0 0);
+            border-top: 1px solid oklch(90% 0 0);
+            flex-shrink: 0;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        footer a {
+            color: oklch(60% 0.22 290);
+            text-decoration: none;
+            margin-left: 5px;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        #network {
+            width: 100%;
+            flex: 1;
+            min-height: 0;
+            border: 1px solid oklch(85% 0 0);
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: row !important;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                gap: 10px;
+                padding: 0.8rem;
+                height: auto !important;
+            }
+
+            h1 {
+                font-size: 1.2rem;
+                width: 100%;
+                text-align: center;
+                order: 1;
+                margin-bottom: 5px;
+            }
+
+            .progress-container {
+                width: 50%;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                order: 2;
+            }
+
+            .progress-bar-bg {
+                width: 100%;
+                max-width: 170px;
+            }
+
+            #clear {
+                width: auto; 
+                justify-content: flex-end;
+                padding: 0.8rem;
+                font-size: 0.75rem;
+                order: 3;
+            }
+
+            .leyenda-container {
+                width: 100%;
+                order: 4;
+                justify-content: center;
+                flex-wrap: wrap;
+                overflow-x: visible; 
+                padding-bottom: 5px;
+            }
+
+            .leyenda-item {
+                flex-shrink: 0; 
+                font-size: 0.7rem;
+            }
+
+            footer {
+                height: auto;
+                padding: 5px 10px;
+                font-size: 0.7rem;
+            }
+        }
