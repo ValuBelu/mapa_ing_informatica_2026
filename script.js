@@ -6,6 +6,7 @@ const YEAR_COLORS = {
     4: 'oklch(77% 0.21 65)',
     5: 'oklch(91% 0.23 128)'
 };
+
 let materiasAprobadas = new Set(); 
 
 function cargarAprobadas() {
@@ -19,19 +20,30 @@ function guardarAprobadas() {
     localStorage.setItem(APROBADAS_KEY, JSON.stringify(Array.from(materiasAprobadas)));
 }
 
+//Actualización de Colores
 function actualizarGrafo(datosGrafo, dataMaterias, network) {
-    const nodosActualizados = [];
-    const aristasActualizadas = datosGrafo.edges.getIds().map(id => ({ 
-        id, 
-        color: { color: 'oklch(70% 0.05 260)' },
-        width: 1
-    }));
+    const esModoOscuro = document.documentElement.getAttribute('data-theme') === 'dark';
     
-    //Pintar APROBADAS (Verde) o color base
+    const colorFlechaInactiva = esModoOscuro ? 'oklch(60% 0 0)' : 'oklch(70% 0.05 260)';
+    const colorFlechaActiva = esModoOscuro ? 'oklch(95% 0 0)' : 'oklch(0% 0 0)';
+
+    const nodosActualizados = [];
+    const aristasMap = {};
+    datosGrafo.edges.getIds().forEach(id => {
+        aristasMap[id] = { 
+            id: id, 
+            color: { color: colorFlechaInactiva },
+            width: 1
+        };
+    });
+    
+    //Pintar APROBADAS (Verde) y PENDIENTES (Color del Año)
     dataMaterias.forEach(materia => {
         const isApproved = materiasAprobadas.has(materia.id);
+        
         let colorBase = YEAR_COLORS[materia.anio] || 'oklch(90% 0 0)';
-        let colorFondo = isApproved ? 'oklch(80% 0.22 145)' : colorBase;       
+        let colorFondo = isApproved ? 'oklch(80% 0.22 145)' : colorBase; 
+        
         nodosActualizados.push({
             id: materia.id,
             color: { 
@@ -45,16 +57,18 @@ function actualizarGrafo(datosGrafo, dataMaterias, network) {
         });
     });
     
-    //Calcular y Pintar HABILITADAS (Amarillo)
+    //Calcular MATERIAS HABILITADAS y FLECHAS ACTIVAS
     dataMaterias.forEach(materia => {
         const tieneCorrelativas = materia.correlativas.length > 0;
         const todasCorrelativasAprobadas = materia.correlativas.every(
             corrId => materiasAprobadas.has(corrId)
         );
+
         if (tieneCorrelativas && todasCorrelativasAprobadas) {
             const materiaId = materia.id;
             if (!materiasAprobadas.has(materiaId)) {
-                const colorHabilitado = 'oklch(85% 0.18 95)'
+                const colorHabilitado = 'oklch(85% 0.18 95)';
+                
                 nodosActualizados.push({
                     id: materiaId,
                     color: { 
@@ -67,26 +81,26 @@ function actualizarGrafo(datosGrafo, dataMaterias, network) {
                     } 
                 });
             }
-            // Resaltar flechas habilitadas
+            
+            // ACTIVAR FLECHAS
             materia.correlativas.forEach(corrId => {
-                const arista = datosGrafo.edges.get({
+                const aristas = datosGrafo.edges.get({
                     filter: item => item.from === corrId && item.to === materiaId
                 });
 
-                if (arista && arista.length > 0) {
-                    aristasActualizadas.push({
-                        id: arista[0].id,
-                        color: { color: 'oklch(20% 0 0)' }, 
-                        width: 2
-                    });
-                }
+                aristas.forEach(arista => {
+                    if (aristasMap[arista.id]) {
+                        aristasMap[arista.id].color = { color: colorFlechaActiva };
+                        aristasMap[arista.id].width = 2;
+                    }
+                });
             });
         }
     });
-    
     datosGrafo.nodes.update(nodosActualizados);
-    datosGrafo.edges.update(aristasActualizadas);
+    datosGrafo.edges.update(Object.values(aristasMap));
     
+    //Barra de Progreso
     const totalMaterias = dataMaterias.length;
     const aprobadasCount = materiasAprobadas.size;
     const porcentaje = Math.round((aprobadasCount / totalMaterias) * 100);
@@ -97,6 +111,7 @@ function actualizarGrafo(datosGrafo, dataMaterias, network) {
     if (barra && texto) {
         barra.style.width = `${porcentaje}%`;
         texto.innerText = `${aprobadasCount} de ${totalMaterias} (${porcentaje}%)`;
+        
         if (porcentaje === 100) {
             texto.style.color = 'oklch(60% 0.22 145)';
             texto.innerText = "¡Carrera Completada! 🎉";
@@ -108,6 +123,7 @@ function actualizarGrafo(datosGrafo, dataMaterias, network) {
     network.unselectAll(); 
 }
 
+//Función Principal
 async function dibujarGrafoCorrelativas(){
     const response = await fetch('mapa_correlatividades.json');
     if (!response.ok) {
@@ -121,8 +137,7 @@ async function dibujarGrafoCorrelativas(){
     const nodes = dataMaterias.map(materia => ({
         id: materia.id,
         label: materia.label,
-        // Nivel jerárquico en el mapa
-        level: (materia.anio-1) *2 + (materia.cuatrimestre - 1), 
+        level: (materia.anio - 1) * 2 + (materia.cuatrimestre - 1), 
         shape: 'box',
         correlativas: materia.correlativas 
     }));
@@ -157,9 +172,7 @@ async function dibujarGrafoCorrelativas(){
                 parentCentralization: false 
             }
         },
-        physics: {
-            enabled: false
-        },
+        physics: { enabled: false },
         interaction: {
             dragNodes: true, 
             zoomView: true,
@@ -172,10 +185,7 @@ async function dibujarGrafoCorrelativas(){
                 forceDirection: 'horizontal',
                 roundness: 0.5
             },
-            color: {
-                color: 'oklch(70% 0.05 260)', 
-                highlight: 'oklch(0% 0 0)'
-            }
+            color: { color: 'oklch(70% 0.05 260)' }
         },
         nodes: {
             font: { 
@@ -189,12 +199,11 @@ async function dibujarGrafoCorrelativas(){
     };
 
     const network = new vis.Network(container, datosGrafo, opciones);
-    
     actualizarGrafo(datosGrafo, dataMaterias, network);
 
+    // --- EVENTOS ---
     network.on("click", function (propiedades) {
         const nodeId = propiedades.nodes[0]; 
-        
         if (nodeId) {
             if (materiasAprobadas.has(nodeId)) {
                 materiasAprobadas.delete(nodeId); 
@@ -206,22 +215,25 @@ async function dibujarGrafoCorrelativas(){
         }
     });
 
+    //Botón Limpiar
     const btnLimpiar = document.getElementById('clear');
-    
     if (btnLimpiar) {
         btnLimpiar.addEventListener('click', function() {
-            materiasAprobadas.clear();
-            guardarAprobadas();
-            actualizarGrafo(datosGrafo, dataMaterias, network);
+            if (confirm("¿Borrar todo el progreso?")) {
+                materiasAprobadas.clear();
+                guardarAprobadas();
+                actualizarGrafo(datosGrafo, dataMaterias, network);
+            }
         });
     }
 
+    //Modo Oscuro
     const btnTema = document.getElementById('theme-toggle');
     const htmlElement = document.documentElement;
-
     const temaGuardado = localStorage.getItem('temaPreferido');
     if (temaGuardado === 'dark') {
         htmlElement.setAttribute('data-theme', 'dark');
+        setTimeout(() => actualizarGrafo(datosGrafo, dataMaterias, network), 100);
     }
 
     if (btnTema) {
@@ -233,6 +245,7 @@ async function dibujarGrafoCorrelativas(){
                 htmlElement.setAttribute('data-theme', 'dark');
                 localStorage.setItem('temaPreferido', 'dark');
             }
+            actualizarGrafo(datosGrafo, dataMaterias, network);
         });
     }
 }
