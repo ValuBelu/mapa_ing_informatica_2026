@@ -101,7 +101,7 @@ function actualizarGrafo(datosGrafo, dataMaterias, network) {
             texto.style.color = 'oklch(60% 0.22 145)';
             texto.innerText = "¡Carrera Completada! 🎉";
         } else {
-            texto.style.color = 'oklch(45% 0 0)';
+            texto.style.color = 'var(--text-muted)';
         }
     }
 
@@ -213,6 +213,26 @@ async function dibujarGrafoCorrelativas(){
             materiasAprobadas.clear();
             guardarAprobadas();
             actualizarGrafo(datosGrafo, dataMaterias, network);
+        });
+    }
+
+    const btnTema = document.getElementById('theme-toggle');
+    const htmlElement = document.documentElement;
+
+    const temaGuardado = localStorage.getItem('temaPreferido');
+    if (temaGuardado === 'dark') {
+        htmlElement.setAttribute('data-theme', 'dark');
+    }
+
+    if (btnTema) {
+        btnTema.addEventListener('click', function() {
+            if (htmlElement.getAttribute('data-theme') === 'dark') {
+                htmlElement.removeAttribute('data-theme');
+                localStorage.setItem('temaPreferido', 'light');
+            } else {
+                htmlElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('temaPreferido', 'dark');
+            }
         });
     }
 }
