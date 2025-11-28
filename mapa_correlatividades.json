@@ -337,7 +337,7 @@
     "label": "INTELIGENCIA ARTIFICIAL",
     "anio": 4,
     "cuatrimestre": 2,
-    "correlativas": ["3659", "3653"]
+    "correlativas": ["3651", "3646"]
   },
   {
     "id": "3665",
@@ -358,7 +358,7 @@
     "label": "GESTIÓN DE LA CALIDAD EN PROCESOS DE SISTEMAS",
     "anio": 4,
     "cuatrimestre": 2,
-    "correlativas": ["3647"]
+    "correlativas": ["3661","3642"]
   },
   {
     "id": "3668",
@@ -393,20 +393,20 @@
     "label": "ELECTIVA I",
     "anio": 5,
     "cuatrimestre": 1,
-    "correlativas": ["3658", "3661", "3663"]
+    "correlativas": ["3661", "3653", "3652"]
   },
   {
     "id": "3673",
     "label": "ELECTIVA II",
     "anio": 5,
     "cuatrimestre": 2,
-    "correlativas": ["3662", "3666"]
+    "correlativas": ["3661", "3653", "3652"]
   },
   {
     "id": "3674",
     "label": "ELECTIVA III",
     "anio": 5,
     "cuatrimestre": 2,
-    "correlativas": ["3664", "3665"]
+    "correlativas": ["3661", "3653", "3652"]
   }
 ]
