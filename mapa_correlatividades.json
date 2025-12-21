@@ -239,7 +239,7 @@
     "label": "PRÁCTICA PROFESIONAL SUPERVISADA",
     "anio": 3,
     "cuatrimestre": 1,
-    "correlativas": ["3642"]
+    "correlativas": ["3642", "3636", "3640"]
   },
   {
     "id": "3651",
@@ -408,5 +408,47 @@
     "anio": 5,
     "cuatrimestre": 2,
     "correlativas": ["3661", "3653", "3652"]
+  },
+  {
+    "id": "901",
+    "label": "INGLÉS I",
+    "anio":1,
+    "cuatrimestre":1,
+    "correlativas":[]
+  },
+  {
+    "id": "902",
+    "label": "INGLÉS II",
+    "anio":1,
+    "cuatrimestre":2,
+    "correlativas":["901"]
+  },
+  {
+    "id": "903",
+    "label": "INGLÉS III",
+    "anio":2,
+    "cuatrimestre":1,
+    "correlativas":["902"]
+  },
+  {
+    "id": "904",
+    "label": "INGLÉS IV",
+    "anio":2,
+    "cuatrimestre":2,
+    "correlativas":["903"]
+  },
+  {
+    "id":"911",
+    "label":"COMPUTACIÓN I",
+    "anio":1,
+    "cuatrimestre":1,
+    "correlativas":[]
+  },
+  {
+    "id":"912",
+    "label":"COMPUTACIÓN II",
+    "anio":1,
+    "cuatrimestre":2,
+    "correlativas":["911"]
   }
 ]

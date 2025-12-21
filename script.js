@@ -7,6 +7,8 @@ const YEAR_COLORS = {
     5: 'oklch(91% 0.23 128)'
 };
 
+let globalYIngles = null;
+let globalYCompu = null;
 let materiasAprobadas = new Set(); 
 
 function cargarAprobadas() {
@@ -18,6 +20,52 @@ function cargarAprobadas() {
 
 function guardarAprobadas() {
     localStorage.setItem(APROBADAS_KEY, JSON.stringify(Array.from(materiasAprobadas)));
+}
+
+function calcularAlturasTransversales(network) {
+    const idsIngles = ['901', '902', '903', '904'];
+    const idsCompu = ['911', '912'];
+    const todosTransversales = [...idsIngles, ...idsCompu];
+    
+    // Obtenemos posiciones de TODO el mapa
+    const allNodeIds = network.body.data.nodes.getIds();
+    const posiciones = network.getPositions(allNodeIds);
+    
+    let maxY = -Infinity;
+    allNodeIds.forEach(id => {
+        // Ignoramos transversales para buscar el suelo real
+        if (!todosTransversales.includes(id) && posiciones[id]) {
+            if (posiciones[id].y > maxY) {
+                maxY = posiciones[id].y;
+            }
+        }
+    });
+
+    if (maxY === -Infinity) maxY = 0;
+    globalYIngles = maxY + 100; 
+    globalYCompu = globalYIngles + 100;  
+}
+
+// Usamos moveNode porque es lo único que vence al layout jerárquico
+function aplicarPosicionesTransversales(network) {
+    if (globalYIngles === null || globalYCompu === null) return;
+
+    const idsIngles = ['901', '902', '903', '904'];
+    const idsCompu = ['911', '912'];
+    const todos = [...idsIngles, ...idsCompu];
+    const posiciones = network.getPositions(todos);
+
+    idsIngles.forEach(id => {
+        if (posiciones[id]) {
+            network.moveNode(id, posiciones[id].x, globalYIngles);
+        }
+    });
+
+    idsCompu.forEach(id => {
+        if (posiciones[id]) {
+            network.moveNode(id, posiciones[id].x, globalYCompu);
+        }
+    });
 }
 
 //Actualización de Colores
@@ -43,7 +91,7 @@ function actualizarGrafo(datosGrafo, dataMaterias, network) {
         
         let colorBase = YEAR_COLORS[materia.anio] || 'oklch(90% 0 0)';
         let colorFondo = isApproved ? 'oklch(80% 0.22 145)' : colorBase; 
-        
+
         nodosActualizados.push({
             id: materia.id,
             color: { 
@@ -69,17 +117,24 @@ function actualizarGrafo(datosGrafo, dataMaterias, network) {
             if (!materiasAprobadas.has(materiaId)) {
                 const colorHabilitado = 'oklch(85% 0.18 95)';
                 
-                nodosActualizados.push({
-                    id: materiaId,
-                    color: { 
-                        background: colorHabilitado, 
-                        border: 'oklch(45% 0.15 260)',
-                        highlight: {
-                             background: colorHabilitado, 
-                             border: 'oklch(45% 0.15 260)',
-                        }
-                    } 
-                });
+                let nodoExistente = nodosActualizados.find(n => n.id === materiaId);
+                
+                if (nodoExistente) {
+                    nodoExistente.color.background = colorHabilitado;
+                    nodoExistente.color.highlight.background = colorHabilitado;
+                } else {
+                    nodosActualizados.push({
+                        id: materiaId,
+                        color: { 
+                            background: colorHabilitado, 
+                            border: 'oklch(45% 0.15 260)',
+                            highlight: {
+                                background: colorHabilitado, 
+                                border: 'oklch(45% 0.15 260)',
+                            }
+                        } 
+                    });
+                }
             }
             
             // ACTIVAR FLECHAS
@@ -120,7 +175,8 @@ function actualizarGrafo(datosGrafo, dataMaterias, network) {
         }
     }
 
-    network.unselectAll(); 
+    network.unselectAll();
+    aplicarPosicionesTransversales(network);
 }
 
 //Función Principal
@@ -199,7 +255,10 @@ async function dibujarGrafoCorrelativas(){
     };
 
     const network = new vis.Network(container, datosGrafo, opciones);
-    actualizarGrafo(datosGrafo, dataMaterias, network);
+    network.once("afterDrawing", () => {
+        calcularAlturasTransversales(network);
+        actualizarGrafo(datosGrafo, dataMaterias, network);
+    });
 
     // --- EVENTOS ---
     network.on("click", function (propiedades) {
@@ -219,11 +278,9 @@ async function dibujarGrafoCorrelativas(){
     const btnLimpiar = document.getElementById('clear');
     if (btnLimpiar) {
         btnLimpiar.addEventListener('click', function() {
-            if (confirm("¿Borrar todo el progreso?")) {
-                materiasAprobadas.clear();
-                guardarAprobadas();
-                actualizarGrafo(datosGrafo, dataMaterias, network);
-            }
+            materiasAprobadas.clear();
+            guardarAprobadas();
+            actualizarGrafo(datosGrafo, dataMaterias, network);
         });
     }
 
